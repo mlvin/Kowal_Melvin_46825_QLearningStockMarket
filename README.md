@@ -36,6 +36,9 @@ Dem Agenten kann ein Dataframe übergeben werden, um eigene Aktiencharts zu verw
 Zur Modellierung der Umwelt wird auf die Klasse "StocksEnv" aus dem GitHub-Repository "gym-anytrading" zugegriffen, dass ein Aktien-Environment zur Verfügung stellt und auf dem OpenAI-Gym basiert. Dieses Environemnt wird an ein eigens-entwickeltes Environemnt "CustomTradingEnv" vererbt, welches wesentliche Methoden wie die Reward-Funktion, oder States implementiert (siehe Frage: Wie wird die Umwelt modelliert? und dem folgenden Klassendiagramm).\
 \
 ![image](https://github.com/user-attachments/assets/2506f3fd-4978-4d9c-9319-066808cdb03a)
+Die Methode "train_agent" trainiert den Agenten mithilfe der übergebenen Attributen, hierbei stehen dem Agenten die Aktionen Buy (Kaufen) und Sell (Verkaufen / Short) zur Verfügung.
+
+De Methode "train_agent" trainiert den Agenten mithilfe der übergebenen Attribute. Dabei stehen dem Agenten die Aktionen Buy (Kaufen) und Sell (Verkaufen / Short) zur Verfügung. In jeder Iteration berechnet der Agent seinen nächsten Schritt, indem er die aktuelle Q-Tabelle nutzt und sie mithilfe der Bellman-Gleichung aktualisiert. Durch den Epsilon-Greedy-Ansatz entscheidet der Agent, ob er auf Basis seines bisherigen Wissens handelt (Exploitation) oder neue Aktionen ausprobiert (Exploration). Der Lernprozess wird über die Anzahl der definierten Epochs durchgeführt. Anschließend wird am Ende das Ergebnis der letzten Iteration auf der Chart dargestellt und der Q-Table ausgegeben.
 
 'Aufbau Agenten, Wie wird Reward representiert/Ausgegeben, Vorstellung Q-Learning, wie wird die Umwelt modelliert? Vorstellung des Ergebnisses eines Durchlaufes, Besonderheiten des Aktienmarktes/Warum interessant als Problem?
 
