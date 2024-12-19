@@ -22,15 +22,22 @@ Der Q-Table (Q-Tabelle) stellt die zentrale Datenstruktur des Q-Learnings dar. I
 \
 Eine zentraler Aspekt des Q-Learnings ist darüber hinaus die Trennung in die sogenannte Exploration und Exploitation Phase: Da die Q-Tabelle zu Beginn nicht (oder mit zufälligen Werten) befüllt ist, muss der Agent zunächst seine Umgebung (Environment) kennenlernen. Dies geschieht in der Exploration Phase, in welcher der Agent zufällig Aktionen ausführt und entsprechend seinen Q-Table aktualisiert. In der Exploitation Phase nutzt der Agent widerum seine gesammelten Erkenntnisse aus und wendet seine optimal gefundene Policy an: Der Agent wählt für den jeweiligen State die beste Action aus den State-Action-Pairs aus (höchster Q-Wert) und durchläuft so das Problem.\
 \
-Für die Trennung zwischen Exploration und Exploitation Phase gibt es mehrer Ansätze. Ein populärer und verwendeter Ansatz in diesem Projekt, ist die Epsilon-Greedy-Strategie. Mit Beginn des Lernens hat das Epsilon zunächst einen Wert von 1, sodass der Agent exploriert. Im Verlauf des Trainings wird der Wert von Epsilon jedoch zunehmend reduziert. Dies erfolgt durch den sogenannten Epsilon-Decay, welcher den schrittweisen Abfall von Epsilon bei jeder Iteration beschreibt. Dadurch nimmt die Wahrscheinlichkeit für Exploration mit der Zeit ab, während die Exploitation (Nutzung des bereits erlernten Wissens) zunehmend bevorzugt wird und der Agent somit das Problem mit seiner erlernten Policy löst.
-
-
-
-
+Für die Trennung zwischen Exploration und Exploitation Phase gibt es mehrer Ansätze. Ein populärer und verwendeter Ansatz in diesem Projekt, ist die Epsilon-Greedy-Strategie. Mit Beginn des Lernens hat das Epsilon zunächst einen Wert von 1, sodass der Agent exploriert. Im Verlauf des Trainings wird der Wert von Epsilon jedoch zunehmend reduziert. Dies erfolgt durch den sogenannten Epsilon-Decay, welcher den schrittweisen Abfall von Epsilon bei jeder Iteration beschreibt. Dadurch nimmt die Wahrscheinlichkeit für Exploration mit der Zeit ab, während die Exploitation (Nutzung des bereits erlernten Wissens) zunehmend bevorzugt wird und der Agent somit das Problem mit seiner erlernten Policy löst.\
+\
 **Wie ist der Agent aufgebaut?**
-Der Agent folg dem Q-Learning Ansatz, bei dem 
+Der Agent funktioniert nach obig erklärten Prinzip und setzt sich aus einer gleichnamigen Klasse "Agent" zusammen. Die Klasse Agent erwartet folgende Übergabeparameter im Konstruktor:
+```python
+class Agent:
+  def __init__(self, dataframe=None, n_epochs=20000, frame_bound=(5, 30), learning_rate=0.7, discount_factor=0.5,
+                   epsilon=1, epsilon_min=0.01,
+                   epsilon_decay=0.9996):
+```
+Dem Agenten kann ein Dataframe übergeben werden, um eigene Aktiencharts zu verwenden, ist kein Dataframe angegeben, so wird der Kurs der Google Aktie verwendet, welche standardmäßig im Environment hinterlegt ist. Der Frame Bound definiert den Bereich auf der Chart auf dem der Agent trainiert wird. Die anderen Attribute ergeben sich aus der obigen Erkärung.\
+Zur Modellierung der Umwelt wird auf die Klasse "StocksEnv" aus dem GitHub-Repository "gym-anytrading" zugegriffen, dass ein Aktien-Environment zur Verfügung stellt und auf dem OpenAI-Gym basiert. Dieses Environemnt wird an ein eigens-entwickeltes Environemnt "CustomTradingEnv" vererbt, welches wesentliche Methoden wie die Reward-Funktion, oder States implementiert (siehe Frage: Wie wird die Umwelt modelliert? und dem folgenden Klassendiagramm).\
+\
+![image](https://github.com/user-attachments/assets/2506f3fd-4978-4d9c-9319-066808cdb03a)
 
 'Aufbau Agenten, Wie wird Reward representiert/Ausgegeben, Vorstellung Q-Learning, wie wird die Umwelt modelliert? Vorstellung des Ergebnisses eines Durchlaufes, Besonderheiten des Aktienmarktes/Warum interessant als Problem?
 
-![image](https://github.com/user-attachments/assets/2506f3fd-4978-4d9c-9319-066808cdb03a)
+
 
