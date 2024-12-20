@@ -82,6 +82,11 @@ elif step_reward > 0:
 if abs(price_diff) < 0.02 * current_price:  # Wenn der Preisunterschied zu gering ist
     step_reward -= 0.5
 ```
+## Vorstellung der Ergebnisse eines Durchlaufes
+Folgender Durchlauf wurde mit den Standardparametern des Agenten durchgeführt. Der genutzte Aktienkurs ist der Google-Aktienkurs, welcher nativ vom Environment zur Verfügung gestellt wird.
+Der Finale Durchlauf ergab folgendes Ergebnis:
+![Figure_1](https://github.com/user-attachments/assets/50578806-cd31-419b-bb44-2f41f27a4867)
+Es zeigt sich, dass der Agent einen Profit von 1.12 erwirtschaften konnte (12% Rendite), wobei der maximal mögliche Gewinn bei 1.38 (38%) liegt.
 'Aufbau Agenten, Wie wird Reward representiert/Ausgegeben, Vorstellung Q-Learning, wie wird die Umwelt modelliert? Vorstellung des Ergebnisses eines Durchlaufes, Besonderheiten des Aktienmarktes/Warum interessant als Problem?
 
 
