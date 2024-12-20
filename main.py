@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from gym_anytrading.datasets import STOCKS_GOOGL
 from gym_anytrading.envs import StocksEnv, Actions, Positions
-
+import pandas as pd
 
 class CustomTradingEnv(StocksEnv):
     # Konstruktor inkl. Vererbung des StocksEnv's
