@@ -236,6 +236,7 @@ class Agent:
         if self.df is None:
             self.df = STOCKS_GOOGL
 
+        #Environment erstellen
         self.env = CustomTradingEnv(
             df=self.df, window_size=self.window_size, frame_bound=self.frame_bound
         )
