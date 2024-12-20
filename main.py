@@ -324,3 +324,6 @@ class Agent:
 
 #Trainieren des Agenten mit den Standardwerten und der Google-Aktie.
 Agent(frame_bound=(5, 50)).train_agent()
+
+#Trainieren mit eigener Aktienchart
+#Agent(dataframe=pd.read_csv("VW.csv"), frame_bound=(5, 50)).train_agent()
