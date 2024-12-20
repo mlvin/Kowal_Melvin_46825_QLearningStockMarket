@@ -1,5 +1,5 @@
 # Kowal_Melvin_46825_QLearningStockMarket
-Ein praktisches Reinforcement Learning Projekt zur Vorlesung "Einführung Artificial Intelligence" im Wintersemester 2024 an der LFH. Ziel ist die Implementierung eines gewinnorientierten Q-Learning Agenten, welcher auf einem statischen Aktienmarkt mit den Optionen Buy und Sell handelt.
+Ein praktisches Reinforcement Learning Projekt zur Vorlesung "Einführung Artificial Intelligence" im Wintersemester 2024 an der LFH. Ziel ist die Implementierung eines gewinnorientierten Q-Learning Agenten, welcher auf einem statischen Aktienmarkt mit den Entscheidungsmöglichkeiten "Buy" und "Sell" handelt.
 ### Installation
 1. GitHub-Repository klonen:
    ```bash
