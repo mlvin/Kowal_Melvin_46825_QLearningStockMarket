@@ -33,9 +33,11 @@ class Agent:
                    epsilon_decay=0.9996):
 ```
 Dem Agenten kann ein Dataframe übergeben werden, um eigene Aktiencharts zu verwenden, ist kein Dataframe angegeben, so wird der Kurs der Google Aktie verwendet, welche standardmäßig im Environment hinterlegt ist. Der Frame Bound definiert den Bereich auf der Chart auf dem der Agent trainiert wird. Die anderen Attribute ergeben sich aus der obigen Erkärung.\
-Zur Modellierung der Umwelt wird auf die Klasse "StocksEnv" aus dem GitHub-Repository "gym-anytrading" zugegriffen, dass ein Aktien-Environment zur Verfügung stellt und auf dem OpenAI-Gym basiert. Dieses Environemnt wird an ein eigens-entwickeltes Environemnt "CustomTradingEnv" vererbt, welches wesentliche Methoden wie die Reward-Funktion, oder States implementiert (siehe Frage: Wie wird die Umwelt modelliert? und dem folgenden Klassendiagramm).\
+Zur Modellierung der Umwelt wird auf die Klasse "StocksEnv" aus dem GitHub-Repository "gym-anytrading" (https://github.com/AminHP/gym-anytrading) zugegriffen, dass ein Aktien-Environment zur Verfügung stellt und auf dem OpenAI-Gym basiert. Dieses Environemnt wird an ein eigens-entwickeltes Environemnt "CustomTradingEnv" vererbt, welches wesentliche Methoden wie die Reward-Funktion, oder States implementiert (siehe Frage: Wie wird die Umwelt modelliert? und dem folgenden Klassendiagramm).\
 \
 ![image](https://github.com/user-attachments/assets/2506f3fd-4978-4d9c-9319-066808cdb03a)
+*Das StocksEnv wird nur mit den relevanten und unbedingt erforderlichen Attributen dargestellt, da es sich um eine umfangreiche Klasse handelt*
+\
 \
 De Methode "train_agent" trainiert den Agenten mithilfe der übergebenen Attribute. Dabei stehen dem Agenten die Aktionen Buy (Kaufen) und Sell (Verkaufen / Short) zur Verfügung. In jeder Iteration berechnet der Agent seinen nächsten Schritt, indem er die aktuelle Q-Tabelle nutzt und sie mithilfe der Bellman-Gleichung aktualisiert. Durch den Epsilon-Greedy-Ansatz entscheidet der Agent, ob er auf Basis seines bisherigen Wissens handelt (Exploitation) oder neue Aktionen ausprobiert (Exploration). Der Lernprozess wird über die Anzahl der definierten Epochs durchgeführt. Anschließend wird am Ende das Ergebnis der letzten Iteration auf der Chart dargestellt und der Q-Table ausgegeben. Auf den genauen Aufbau des Q-Tables wird bei der Fragestellung "Wie wird der Reward repräsentiert?" eingegangen.\
 
@@ -106,10 +108,18 @@ So ist der Agent profitabel, trifft jedoch nicht an jedem Punkt die bestmöglich
 Wie bereits erläutert lässt sich der Aktienmarkt als stochastisch beschreiben. Es gibt eine Vielzahl von Ereignissen, welche die Grundlage für Kursbewegungen darstellen können. Dies macht den Aktienmarkt besonders interessant für Reinforcement Learning, da Ansätze wie Q-Learning den Markt als deterministisch betrachten, obwohl dieser stark von Zufallsfaktoren geprägt ist, sodass nur näherungsweise "optimale" Ergebnisse erzielt werden können, anders als in "typischen" Reinforcement Learning Problemen, wie dem Entkommen eines Labyrinths. Beim Q-Learning Ansatz bieten sich darüber hinaus viele verschiedene Ausgestaltungen für die Darstellung des Rewards sowie der States.
 
 # Erktennisse und Probleme bei der Implementierung
-## Modellierung der Umgebung
 Die Modellierung der Umgebung, insbesondere der States und der Reward-Funktion, hat sich als eine erhebliche Herausforderung herausgestellt, was vor allem auf die beschriebenen Eigenheiten des Aktienmarktes zurückzuführen ist. Diese Komplexität erschwert es dem Agenten, eine konsistent profitable Handelsstrategie zu entwickeln. Ein Beispiel hierfür ist die Schwierigkeit, eine Reward-Funktion zu gestalten, die den Agenten dazu anregt, den Gewinn langfristig zu maximieren, anstatt sich auf die Minimierung von Verlusten zu konzentrieren. Dies führt dazu, dass der Agent in bestimmten Fällen zu konservativ agiert und potenziell gewinnbringende Gelegenheiten übersieht.\
 \
 Ein weiteres Problem bestand in der Auswahl und Kombination geeigneter Indikatoren für die Zustandsdarstellung (State). Der Markt ist von Natur aus dynamisch und kann unterschiedliche Phasen wie hohe Volatilität oder fallende Kurse durchlaufen. Es war herausfordernd, eine Set von Indikatoren zu finden, das in verschiedenen Marktumfeldern funktioniert und gleichzeitig profitabel bleibt.
+
+# Grundlegend verwendete Literatur
+Geron, A. (2023): Praxiseinstieg Machine Learning - Konzepte, Tools und Techniken für intelligente Systeme, Heidelberg 2023.\
+\
+Sutton, R./Barto, A. (2018): Reinforcement Learning: An Introduction, Stanford 2018.\
+\
+Frattini, A./Bianchini, I./Garzonio, A. (2022): Financial Technical Indicator and Algorithmic Trading Strategy Based on Machine Learning and Alternative Data, in: Risks Vol. 10.\
+\
+deeplizard (2018): Q-Learning Explained - A Reinforcement Learning Technique, https://www.youtube.com/watch?v=qhRNvCVVJaA.
 
 
 
