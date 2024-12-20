@@ -2,7 +2,7 @@
 Praktisches Reinforcement Learning Projekt zur Vorlesung "Einführung Artificial Intelligence" im Wintersemester 2024 an der LFH.
 
 # Beantwortung der Fragen zum Projekt
-**Was ist Q-Learning?**\
+## Was ist Q-Learning?
 Q-Learning ist eine spezielle Form des Reinforcement Learnings. Bei Reinforcment Learning handelt es sich um einen Ansatz, bei dem der Agent keine vordefinierten Antworten oder Anweisungen bekommt, sondern durch Trial und Error dazulernt. Der Agent bekommt hierbei von seiner Umgebung (Environment) Informationen bereitgestellt und erhält darüber hinaus Feedback in Form von Belohnung oder Bestrafung durch eine Reward-Funktion. Ziel des Agenten ist es, die Belohnung zu maximieren und somit das vorgegebene Problem optimal zu lösen (siehe Abbildung).\
 \
 ![image](https://github.com/user-attachments/assets/d42eab39-201e-412b-a8d1-f3f2941d4474)
@@ -24,7 +24,7 @@ Eine zentraler Aspekt des Q-Learnings ist darüber hinaus die Trennung in die so
 \
 Für die Trennung zwischen Exploration und Exploitation Phase gibt es mehrer Ansätze. Ein populärer und verwendeter Ansatz in diesem Projekt, ist die Epsilon-Greedy-Strategie. Mit Beginn des Lernens hat das Epsilon zunächst einen Wert von 1, sodass der Agent exploriert. Im Verlauf des Trainings wird der Wert von Epsilon jedoch zunehmend reduziert. Dies erfolgt durch den sogenannten Epsilon-Decay, welcher den schrittweisen Abfall von Epsilon bei jeder Iteration beschreibt. Dadurch nimmt die Wahrscheinlichkeit für Exploration mit der Zeit ab, während die Exploitation (Nutzung des bereits erlernten Wissens) zunehmend bevorzugt wird und der Agent somit das Problem mit seiner erlernten Policy löst.\
 \
-**Wie ist der Agent aufgebaut?**
+## Wie ist der Agent aufgebaut?
 Der Agent funktioniert nach obig erklärten Prinzip und setzt sich aus einer gleichnamigen Klasse "Agent" zusammen. Die Klasse Agent erwartet folgende Übergabeparameter im Konstruktor:
 ```python
 class Agent:
@@ -36,9 +36,16 @@ Dem Agenten kann ein Dataframe übergeben werden, um eigene Aktiencharts zu verw
 Zur Modellierung der Umwelt wird auf die Klasse "StocksEnv" aus dem GitHub-Repository "gym-anytrading" zugegriffen, dass ein Aktien-Environment zur Verfügung stellt und auf dem OpenAI-Gym basiert. Dieses Environemnt wird an ein eigens-entwickeltes Environemnt "CustomTradingEnv" vererbt, welches wesentliche Methoden wie die Reward-Funktion, oder States implementiert (siehe Frage: Wie wird die Umwelt modelliert? und dem folgenden Klassendiagramm).\
 \
 ![image](https://github.com/user-attachments/assets/2506f3fd-4978-4d9c-9319-066808cdb03a)
-Die Methode "train_agent" trainiert den Agenten mithilfe der übergebenen Attributen, hierbei stehen dem Agenten die Aktionen Buy (Kaufen) und Sell (Verkaufen / Short) zur Verfügung.
+\
+De Methode "train_agent" trainiert den Agenten mithilfe der übergebenen Attribute. Dabei stehen dem Agenten die Aktionen Buy (Kaufen) und Sell (Verkaufen / Short) zur Verfügung. In jeder Iteration berechnet der Agent seinen nächsten Schritt, indem er die aktuelle Q-Tabelle nutzt und sie mithilfe der Bellman-Gleichung aktualisiert. Durch den Epsilon-Greedy-Ansatz entscheidet der Agent, ob er auf Basis seines bisherigen Wissens handelt (Exploitation) oder neue Aktionen ausprobiert (Exploration). Der Lernprozess wird über die Anzahl der definierten Epochs durchgeführt. Anschließend wird am Ende das Ergebnis der letzten Iteration auf der Chart dargestellt und der Q-Table ausgegeben. Auf den genauen Aufbau des Q-Tables wird bei der Fragestellung "Wie wird der Reward repräsentiert?" eingegangen.\
 
-De Methode "train_agent" trainiert den Agenten mithilfe der übergebenen Attribute. Dabei stehen dem Agenten die Aktionen Buy (Kaufen) und Sell (Verkaufen / Short) zur Verfügung. In jeder Iteration berechnet der Agent seinen nächsten Schritt, indem er die aktuelle Q-Tabelle nutzt und sie mithilfe der Bellman-Gleichung aktualisiert. Durch den Epsilon-Greedy-Ansatz entscheidet der Agent, ob er auf Basis seines bisherigen Wissens handelt (Exploitation) oder neue Aktionen ausprobiert (Exploration). Der Lernprozess wird über die Anzahl der definierten Epochs durchgeführt. Anschließend wird am Ende das Ergebnis der letzten Iteration auf der Chart dargestellt und der Q-Table ausgegeben.
+## Wie wird die Umwelt modelliert?
+Wie obig erläutert, wird die Umwelt durch ein eigenes Environment modelliert, welches von der Klasse "StocksEnv" aus dem Repository "gym-anytrading" erbt. Grund hierfür ist, dass der Reward sowie State-Representation des gegebenen Environments simpel ausgestaltet sind und der State lediglich durch den Schlusspreis sowie der Preisdifferenz zum Vortag dargestellt. Der Reward bezieht sich gleichermaßen lediglich darauf ob die Aktion des Agenten gewinnbringend oder verlustreich ist. Dies ist für den gewählten Ansatz eines Reinforcement Agenten der Q-Learning einsetzt nicht tragbar, da der Agent so keine fundierten Entscheidungen treffen kann, wie sich auch durch Tests gezeigt hat.\
+\
+Das CustomTradingEnv implementiert den State (_get_observation()) so, dass der State aus einem Tupel aus den Indikatoren: Simple Moving Average (SMA), Relative Strength Index (RSI), Momentum sowie Volatilität und Preisänderung zum Vortag, zurückgegeben wird. SMA, RSI und Momentum können hierbei die Werte 1 -> Buy oder 0 -> Sell annehmen, während Volatilität und Preisänderung diskrete Werte sind.\
+\
+**Probleme mit diskerten Werten:**\
+Das Nutzen von diskreten Werten kann zu Problemen führen, da die Anzahl an States somit praktisch unbegrenzt ist wodurch sich die Performance über große Zeiträume stark verschlechtert. Lösungsmöglichkeiten könnten hierfür die Quantisierung sein (sprich es wird eine Diskretierung der Preisänderung auf Werte zwischen 0 und 1 angewandt und diese in gleichmäßige schritte bspw. von 0.1 eingeteilt), oder das Ableiten von Handlungsempfehlungen (Buy oder Sell). Da dies jedoch die Genauigkeit des Agenten beinflussen und mittels diskreter Werte die besten Ergebnisse erzielt wurden sowie die Performanceeinbußen bei den auferlegten Zeiträumen nicht wahrnehmbar waren, wurden die Volatilität und Preisänderung als diskrete Werte belassen.
 
 'Aufbau Agenten, Wie wird Reward representiert/Ausgegeben, Vorstellung Q-Learning, wie wird die Umwelt modelliert? Vorstellung des Ergebnisses eines Durchlaufes, Besonderheiten des Aktienmarktes/Warum interessant als Problem?
 
