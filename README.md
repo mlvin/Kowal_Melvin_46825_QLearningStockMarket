@@ -13,6 +13,9 @@ Ein praktisches Reinforcement Learning Projekt zur Vorlesung "Einführung Artifi
 4. Algorithmus ausführen:
    ```bash
    python3 main.py
+\
+\
+Bei Installationsproblemen gern auf mich zukommen. :)
    
 # Beantwortung der Fragen zum Projekt
 ## Was ist Q-Learning?
