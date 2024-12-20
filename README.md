@@ -137,6 +137,8 @@ Sutton, R./Barto, A. (2018): Reinforcement Learning: An Introduction, Stanford 2
 \
 Frattini, A./Bianchini, I./Garzonio, A. (2022): Financial Technical Indicator and Algorithmic Trading Strategy Based on Machine Learning and Alternative Data, in: Risks Vol. 10.\
 \
+Murphy, J. (1999): Technische Analyse der Finanzmärkte - Grundlagen, Strategien, Methoden, Anwendungen, München 2003.\
+\
 deeplizard (2018): Q-Learning Explained - A Reinforcement Learning Technique, https://www.youtube.com/watch?v=qhRNvCVVJaA.
 
 
