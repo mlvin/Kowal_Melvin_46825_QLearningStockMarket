@@ -130,7 +130,7 @@ class CustomTradingEnv(StocksEnv):
         avg_negative = (
             np.mean([-change for change in price_changes if change < 0])
             if any(change < 0 for change in price_changes)
-            else 1e-6
+            else 1e-6 # um Divison by Zero zu verhindern
         )
 
         rs = avg_positive / avg_negative
@@ -200,7 +200,7 @@ class CustomTradingEnv(StocksEnv):
         avg_negative = (
             np.mean([-change for change in price_changes if change < 0])
             if any(change < 0 for change in price_changes)
-            else 1e-6
+            else 1e-6 # um Divison by Zero zu verhindern
         )
 
         # Berechnung der Relative-Strength & Relative Strength Index -> Nach Formel
