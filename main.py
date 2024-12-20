@@ -6,11 +6,29 @@ from gym_anytrading.envs import StocksEnv, Actions, Positions
 
 class CustomTradingEnv(StocksEnv):
     # Konstruktor inkl. Vererbung des StocksEnv's
+    """
+        Angepasstes Aktien-Envrionment hinsichtlich State (observation), Reward sowie Handelsgebühren, welches von dem "StockEnv" aus dem Github-Repository gym-anytrading erbt.
+
+        Attributes:
+            df: DataFrame -> Aktienchart
+            window_size: int -> Untere Grenze an dem der Agent auf der Chart "startet" -> Fenstergröße.
+            frame_bound: tuple -> Tupel, welches den Zeitraum auf der Aktienchart definiert
+
+        """
     def __init__(self, df, window_size, frame_bound):
         super().__init__(df=df, window_size=window_size, frame_bound=frame_bound)
 
     # Reward-Funktion des Environments, welche sich auf SMA, RSI & Momentum bezieht.
     def _calculate_reward(self, action):
+        """
+        Berechnet den Reward für die gewählte Aktion des Agenten.
+
+        Attributes:
+            action: boolean -> die gewählte Aktion des Agenten (Buy=1, Sell=0)
+
+        Returns:
+            step_reward: float -> Der ermittelte Reward
+        """
         # Initiale Belohnung auf 0 setzen
         step_reward = 0
         current_price = self.prices[self._current_tick]
@@ -76,7 +94,15 @@ class CustomTradingEnv(StocksEnv):
         return step_reward
 
     def _update_profit(self, action):
-        """Überschreibung der Profit-Methode um Handelsgebühren zu ignorieren."""
+        """
+        Überschreibung der Profit-Methode um Handelsgebühren zu ignorieren.
+
+        Attributes:
+            action: boolean -> die gewählte Aktion des Agenten (Buy=1, Sell=0)
+
+        Returns:
+            none (Agent greift über das Environment auf den Profit zu)
+        """
         trade = False
         if (action == Actions.Buy.value and self._position == Positions.Short) or (
             action == Actions.Sell.value and self._position == Positions.Long
@@ -165,6 +191,20 @@ class Agent:
     die CustomTradingEnv Klasse bereitgestellt werden, entscheiden. Diese stellt durch den State (_get_observation) sowie
     der Reward-Funktion, die Marktdaten und Indikatoren zur Entscheidungsfindung zur Verfügung. Das Ergebnis der letzten
     Iteration wird als Chart ausgegeben und der Q-Table in der Konsole ausgegeben.
+
+    Attributes:
+           df: DataFrame, das die Aktienkursdaten enthält.
+           n_epochs: Anzahl der Durchläufe für das Training des Agenten.
+           frame_bound: Tupel, welches den Zeitraum auf der Aktienchart definiert -> Wichtig: Der erste Eintrag
+            muss >= 1 sein, da der Agent die Daten mindestens eines Tages als Historie benötigt. Je höher der untere
+            Frame-Bound, mit desto mehr Historie startet der Agent. -> frame_bound = (10, 40): 10 Tage als Historie
+            für das Training.
+           learning_rate: Die Lernrate zur Aktualisierung der Q-Tabelle.
+           discount_factor: Der Discount-Factor, um zukünftige Belohnungen zu berücksichtigen.
+           epsilon: Die Explorationsrate für den epsilon-greedy Ansatz.
+           epsilon_min: Der minimale Wert für epsilon.
+           epsilon_decay: Der Abklingfaktor für epsilon nach jedem Epoch.
+           
     """
 
     def __init__(
@@ -178,20 +218,6 @@ class Agent:
         epsilon_min=0.01,
         epsilon_decay=0.9996,
     ):
-        """
-        Attributes:
-           df: DataFrame, das die Aktienkursdaten enthält.
-           n_epochs: Anzahl der Durchläufe für das Training des Agenten.
-           frame_bound: Tupel, welches den Zeitraum auf der Aktienchart definiert -> Wichtig: Der erste Eintrag
-            muss >= 1 sein, da der Agent die Daten mindestens eines Tages als Historie benötigt. Je höher der untere
-            Frame-Bound, mit desto mehr Historie startet der Agent. -> frame_bound = (10, 40): 10 Tage als Historie
-            für das Training.
-           learning_rate: Die Lernrate zur Aktualisierung der Q-Tabelle.
-           discount_factor: Der Discount-Factor, um zukünftige Belohnungen zu berücksichtigen.
-           epsilon: Die Explorationsrate für den epsilon-greedy Ansatz.
-           epsilon_min: Der minimale Wert für epsilon.
-           epsilon_decay: Der Abklingfaktor für epsilon nach jedem Epoch.
-        """
 
         self.df = dataframe
         self.n_epochs = n_epochs
