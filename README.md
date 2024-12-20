@@ -1,6 +1,19 @@
 # Kowal_Melvin_46825_QLearningStockMarket
-Praktisches Reinforcement Learning Projekt zur Vorlesung "Einführung Artificial Intelligence" im Wintersemester 2024 an der LFH.
-
+Ein praktisches Reinforcement Learning Projekt zur Vorlesung "Einführung Artificial Intelligence" im Wintersemester 2024 an der LFH.
+### Installation
+1. GitHub-Repository klonen:
+   ```bash
+   git clone https://github.com/mlvin/Kowal_Melvin_46825_QLearningStockMarket.git
+2. In den Ordner des Repositories navigieren:
+   ```bash
+   cd Kowal_Melvin_46825_QLearningStockMarket
+3. Erforderliche Pakete installieren:
+   ```bash
+   pip install -r requirements.txt
+4. Algorithmus ausführen:
+   ```bash
+   python3 main.py
+   
 # Beantwortung der Fragen zum Projekt
 ## Was ist Q-Learning?
 Q-Learning ist eine spezielle Form des Reinforcement Learnings. Bei Reinforcment Learning handelt es sich um einen Ansatz, bei dem der Agent keine vordefinierten Antworten oder Anweisungen bekommt, sondern durch Trial und Error dazulernt. Der Agent bekommt hierbei von seiner Umgebung (Environment) Informationen bereitgestellt und erhält darüber hinaus Feedback in Form von Belohnung oder Bestrafung durch eine Reward-Funktion. Ziel des Agenten ist es, die Belohnung zu maximieren und somit das vorgegebene Problem optimal zu lösen (siehe Abbildung).\
