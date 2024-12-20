@@ -90,7 +90,7 @@ Der Finale Durchlauf ergab folgendes Ergebnis:\
 \
 \
 **Ausschnitt aus dem Q-Table:**
-\
+
 | State                                | Q-values (Buy, Sell)                   |
 |--------------------------------------|--------------------------------|
 | (1, -1, 1, np.float32(4.03), 0)      | [-6.2999252   0.67106444]     |
@@ -102,9 +102,15 @@ Der Finale Durchlauf ergab folgendes Ergebnis:\
 Es zeigt sich, dass der Agent einen Profit von 1.12 erwirtschaften konnte (12% Rendite), wobei der maximal mögliche Gewinn bei 1.38 (38%) liegt.
 So ist der Agent profitabel, trifft jedoch nicht an jedem Punkt die bestmögliche Entscheidung. Dies ist darauf zurückzuführen, dass Aktienkurse gemeinhin als sehr komplex und stochastisch beschrieben werden können. Die zugrunde liegenden Marktmechanismen unterliegen zahlreichen, oft unvorhersehbaren Faktoren wie Wirtschaftsdaten, geopolitischen Ereignissen und Marktstimmungen, die eine präzise Vorhersage anhand weniger Indikatoren im State erschweren. Nichtdestotrotz lässt sich das Ergebnis als gut klassifizieren, da eine Rendite von 12% an 50 Hanadelstagen ein akzeptables Ergebnis darstellt und sich am Verhalten des Agenten zeigen lässt, dass dieser begründbare Entscheidungen trifft. So ist in obiger Abbildung zu sehen, dass der Agent dazu neigt sich für Buy zu entscheiden, wenn die Kurse niedrig sind und in Hochphasen dazu tendiert zu verkaufen. Dies wird insbesondere ab Handelstag 35 deutlich.
 
-## 
+## Die Besonderheiten des Aktienmarktes, wieso interessant als Problem?
+Wie bereits erläutert lässt sich der Aktienmarkt als stochastisch beschreiben. Es gibt eine Vielzahl von Ereignissen, welche die Grundlage für Kursbewegungen darstellen können. Dies macht den Aktienmarkt besonders interessant für Reinforcement Learning, da Ansätze wie Q-Learning den Markt als deterministisch betrachten, obwohl dieser stark von Zufallsfaktoren geprägt ist, sodass nur näherungsweise "optimale" Ergebnisse erzielt werden können, anders als in "typischen" Reinforcement Learning Problemen, wie dem Entkommen eines Labyrinths. Beim Q-Learning Ansatz bieten sich darüber hinaus viele verschiedene Ausgestaltungen für die Darstellung des Rewards sowie der States.
 
-'Aufbau Agenten, Wie wird Reward representiert/Ausgegeben, Vorstellung Q-Learning, wie wird die Umwelt modelliert? Vorstellung des Ergebnisses eines Durchlaufes, Besonderheiten des Aktienmarktes/Warum interessant als Problem?
+# Erktennisse und Probleme bei der Implementierung
+## Modellierung der Umgebung
+Die Modellierung der Umgebung, insbesondere der States und der Reward-Funktion, hat sich als eine erhebliche Herausforderung herausgestellt, was vor allem auf die beschriebenen Eigenheiten des Aktienmarktes zurückzuführen ist. Diese Komplexität erschwert es dem Agenten, eine konsistent profitable Handelsstrategie zu entwickeln. Ein Beispiel hierfür ist die Schwierigkeit, eine Reward-Funktion zu gestalten, die den Agenten dazu anregt, den Gewinn langfristig zu maximieren, anstatt sich auf die Minimierung von Verlusten zu konzentrieren. Dies führt dazu, dass der Agent in bestimmten Fällen zu konservativ agiert und potenziell gewinnbringende Gelegenheiten übersieht.\
+\
+Ein weiteres Problem bestand in der Auswahl und Kombination geeigneter Indikatoren für die Zustandsdarstellung (State). Der Markt ist von Natur aus dynamisch und kann unterschiedliche Phasen wie hohe Volatilität oder fallende Kurse durchlaufen. Es war herausfordernd, eine Set von Indikatoren zu finden, das in verschiedenen Marktumfeldern funktioniert und gleichzeitig profitabel bleibt.
+
 
 
 
