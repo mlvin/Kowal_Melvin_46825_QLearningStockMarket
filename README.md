@@ -42,11 +42,46 @@ De Methode "train_agent" trainiert den Agenten mithilfe der übergebenen Attribu
 ## Wie wird die Umwelt modelliert?
 Wie obig erläutert, wird die Umwelt durch ein eigenes Environment modelliert, welches von der Klasse "StocksEnv" aus dem Repository "gym-anytrading" erbt. Grund hierfür ist, dass der Reward sowie State-Representation des gegebenen Environments simpel ausgestaltet sind und der State lediglich durch den Schlusspreis sowie der Preisdifferenz zum Vortag dargestellt. Der Reward bezieht sich gleichermaßen lediglich darauf ob die Aktion des Agenten gewinnbringend oder verlustreich ist. Dies ist für den gewählten Ansatz eines Reinforcement Agenten der Q-Learning einsetzt nicht tragbar, da der Agent so keine fundierten Entscheidungen treffen kann, wie sich auch durch Tests gezeigt hat.\
 \
-Das CustomTradingEnv implementiert den State (_get_observation()) so, dass der State aus einem Tupel aus den Indikatoren: Simple Moving Average (SMA), Relative Strength Index (RSI), Momentum sowie Volatilität und Preisänderung zum Vortag, zurückgegeben wird. SMA, RSI und Momentum können hierbei die Werte 1 -> Buy oder 0 -> Sell annehmen, während Volatilität und Preisänderung diskrete Werte sind.\
+Das CustomTradingEnv implementiert den State (_get_observation()) so, dass der State aus einem Tupel aus den Indikatoren: Simple Moving Average (SMA), Relative Strength Index (RSI), Momentum sowie Volatilität und Preisänderung zum Vortag, besteht und zurückgegeben wird. SMA, RSI, Momentum und Preisänderung können hierbei die Werte 1 -> Buy oder 0 -> Sell annehmen, da der State direkt "Handlungsempfehlungen" ableiteitet um die Dimension des Q-Tables zu schonen, während es sich bei der Volatilität um einen diskreten Wert handelt. Diese Indikatoren sind gängig im Bereich des Aktienhandels und zeigen in der Kombination die besten Ergebnisse.
 \
-**Probleme mit diskerten Werten:**\
-Das Nutzen von diskreten Werten kann zu Problemen führen, da die Anzahl an States somit praktisch unbegrenzt ist wodurch sich die Performance über große Zeiträume stark verschlechtert. Lösungsmöglichkeiten könnten hierfür die Quantisierung sein (sprich es wird eine Diskretierung der Preisänderung auf Werte zwischen 0 und 1 angewandt und diese in gleichmäßige schritte bspw. von 0.1 eingeteilt), oder das Ableiten von Handlungsempfehlungen (Buy oder Sell). Da dies jedoch die Genauigkeit des Agenten beinflussen und mittels diskreter Werte die besten Ergebnisse erzielt wurden sowie die Performanceeinbußen bei den auferlegten Zeiträumen nicht wahrnehmbar waren, wurden die Volatilität und Preisänderung als diskrete Werte belassen.
+**Probleme mit diskreten Werten:**\
+Das Nutzen von diskreten Werten kann zu Problemen führen, da die Anzahl an States somit praktisch unbegrenzt ist wodurch sich die Performance über große Zeiträume stark verschlechtert. Eine mögliche Lösung hierfür wäre die Quantisierung, bei der kontinuierliche Werte, wie z.B. Preisänderungen, auf einen festen Bereich von 0 bis 1 komprimiert und in gleichmäßige Schritte (z.B. in 0.1er-Schritten) unterteilt werden. Alternativ können auch Handlungsempfehlungen wie "Buy" oder "Sell" abgeleitet werden. Hinsichtlich der Volatilität hat dies die Genaugikeit des Agenten jedoch stark negativ beeinflusst, sodass die Volatilität als diskreter Wert belassen wurde, insbesondere da Performanceeinbußen bei den auferlegten Zeiträumen nicht wahrnehmbar waren.\
+\
+Darüber hinaus überschreibt das "CustomEnv" die Methode "_update_profit()", da in der Oberklasse "StocksEnv" Transaktionsgebühren mit in der Ermittlung des Profits einfließen. Zur Komplexitätsreduzierung wurde diese Eigenschaft in der Methode des "CustomEnv" entfernt.
 
+## Wie wird der Reward representiert?
+Der Reward bezieht sich auf die im State ermittelten Indikatoren um den Agenten bestmöglich im Lernprozess zu unterstützen und ist ebenfalls als Methode im "CustomTradingEnv" implementiert. Datentyptechnisch handelt es sich um einen Float, folglich kann der Reward positiv als auch negativ sein.\
+\
+Die Methode fragt mehrere Konstellationen ab und errechnet daraus den zurückzugebenden Reward. Für die Aktion "Buy" gilt beispielsweise (für "Sell" gilt ähnliches nur in anderer Richtung):
+```python
+if self._position == Positions.Short:
+    # Profit aus der Schließung einer Short-Position
+    step_reward += (last_trade_price - current_price) * 3
+elif self._position == Positions.Long:
+    # Bestrafung für redundante Kaufaktionen, wenn bereits in einer Long-Position
+    step_reward -= 0.5
+
+# Belohnung für Kauf in einem überverkauften Markt (RSI < 30)
+if rsi_indicator == 1:  # RSI < 30: Überverkauft
+    step_reward += 1.5  # Höhere Belohnung für Kauf bei günstigen Marktbedingungen
+
+# Bestrafung für Kauf in einem Abwärtstrend (momentum < 0)
+if momentum == 0:  # Kein Momentum
+    step_reward -= 1  # Kleine Bestrafung für Kauf ohne Momentum
+```
+Darüber hinaus wird der Reward in Abhängigkeit der größe des Verlustes / Profites skaliert und langsames Handeln bestraft:
+```python
+if step_reward < 0:
+    # Verstärkte Strafe für größere Verluste, abhängig vom Preisunterschied
+    step_reward *= 1 + (abs(price_diff) / current_price) * 0.7
+elif step_reward > 0:
+    # Verstärkte Belohnung für größere Gewinne, abhängig vom Preisunterschied
+    step_reward *= 1.5 + (abs(price_diff) / current_price) * 0.3
+
+# Zusätzliche Strafe für langsames Handeln
+if abs(price_diff) < 0.02 * current_price:  # Wenn der Preisunterschied zu gering ist
+    step_reward -= 0.5
+```
 'Aufbau Agenten, Wie wird Reward representiert/Ausgegeben, Vorstellung Q-Learning, wie wird die Umwelt modelliert? Vorstellung des Ergebnisses eines Durchlaufes, Besonderheiten des Aktienmarktes/Warum interessant als Problem?
 
 
