@@ -84,9 +84,26 @@ if abs(price_diff) < 0.02 * current_price:  # Wenn der Preisunterschied zu gerin
 ```
 ## Vorstellung der Ergebnisse eines Durchlaufes
 Folgender Durchlauf wurde mit den Standardparametern des Agenten durchgeführt. Der genutzte Aktienkurs ist der Google-Aktienkurs, welcher nativ vom Environment zur Verfügung gestellt wird.
-Der Finale Durchlauf ergab folgendes Ergebnis:
+Der Finale Durchlauf ergab folgendes Ergebnis:\
+\
 ![Figure_1](https://github.com/user-attachments/assets/50578806-cd31-419b-bb44-2f41f27a4867)
+\
+\
+**Ausschnitt aus dem Q-Table:**
+\
+| State                                | Q-values (Buy, Sell)                   |
+|--------------------------------------|--------------------------------|
+| (1, -1, 1, np.float32(4.03), 0)      | [-6.2999252   0.67106444]     |
+| (1, -1, 1, np.float32(3.35), 1)      | [-6.79130352  3.3500067 ]     |
+| (0, -1, 0, np.float32(2.06), 1)      | [10.74121976  5.09576441]     |
+| (1, -1, 0, np.float32(1.99), 0)      | [ 7.60168231 14.1954875 ]     |
+| (1, -1, 0, np.float32(1.73), 1)      | [20.71418571 -0.50708961]     |
+
 Es zeigt sich, dass der Agent einen Profit von 1.12 erwirtschaften konnte (12% Rendite), wobei der maximal mögliche Gewinn bei 1.38 (38%) liegt.
+So ist der Agent profitabel, trifft jedoch nicht an jedem Punkt die bestmögliche Entscheidung. Dies ist darauf zurückzuführen, dass Aktienkurse gemeinhin als sehr komplex und stochastisch beschrieben werden können. Die zugrunde liegenden Marktmechanismen unterliegen zahlreichen, oft unvorhersehbaren Faktoren wie Wirtschaftsdaten, geopolitischen Ereignissen und Marktstimmungen, die eine präzise Vorhersage anhand weniger Indikatoren im State erschweren. Nichtdestotrotz lässt sich das Ergebnis als gut klassifizieren, da eine Rendite von 12% an 50 Hanadelstagen ein akzeptables Ergebnis darstellt und sich am Verhalten des Agenten zeigen lässt, dass dieser begründbare Entscheidungen trifft. So ist in obiger Abbildung zu sehen, dass der Agent dazu neigt sich für Buy zu entscheiden, wenn die Kurse niedrig sind und in Hochphasen dazu tendiert zu verkaufen. Dies wird insbesondere ab Handelstag 35 deutlich.
+
+## 
+
 'Aufbau Agenten, Wie wird Reward representiert/Ausgegeben, Vorstellung Q-Learning, wie wird die Umwelt modelliert? Vorstellung des Ergebnisses eines Durchlaufes, Besonderheiten des Aktienmarktes/Warum interessant als Problem?
 
 
