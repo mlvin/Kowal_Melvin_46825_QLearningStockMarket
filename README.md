@@ -52,7 +52,7 @@ class Agent:
 Dem Agenten kann ein Dataframe übergeben werden, um eigene Aktiencharts zu verwenden, ist kein Dataframe angegeben, so wird der Kurs der Google Aktie verwendet, welche standardmäßig im Environment hinterlegt ist. Der Frame Bound definiert den Bereich auf der Chart auf dem der Agent trainiert wird. Die anderen Attribute ergeben sich aus der obigen Erkärung.\
 Zur Modellierung der Umwelt wird auf die Klasse "StocksEnv" aus dem GitHub-Repository "gym-anytrading" (https://github.com/AminHP/gym-anytrading) zugegriffen, dass ein Aktien-Environment zur Verfügung stellt und auf dem OpenAI-Gym basiert. Dieses Environment wird an ein eigens-entwickeltes Environment "CustomTradingEnv" vererbt, welches wesentliche Methoden wie die Reward-Funktion, oder States implementiert (siehe Frage: Wie wird die Umwelt modelliert? Sowie dem folgenden Klassendiagramm).
 #### Klassendiagramm des Projektes
-![image](https://github.com/user-attachments/assets/2506f3fd-4978-4d9c-9319-066808cdb03a)
+![Untitled design](https://github.com/user-attachments/assets/0e6d34bf-3b2d-4862-b48f-cbe59acc1797)
 *Das StocksEnv wird nur mit den relevanten und unbedingt erforderlichen Attributen dargestellt, da es sich um eine umfangreiche Klasse handelt*
 \
 \
